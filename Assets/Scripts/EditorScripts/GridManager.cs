@@ -10,6 +10,10 @@ public class GridManager : MonoBehaviour
     public GameObject prefabToPlace;
     public Transform placementContainer;
     private GameObject ghostObject;
+    private float offsetY = 0.5f;
+    private Quaternion rotation;
+    public PrefabOptionsMenu prefabOptionsMenu;
+    public bool UI = false;
 
     public Vector3 GridToWorld(Vector3Int gridPos)
     {
@@ -44,6 +48,11 @@ public class GridManager : MonoBehaviour
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
 
+            if (Input.GetKeyDown(KeyCode.R)) {
+                rotation *= Quaternion.Euler(0, 90, 0);
+                ghostObject.transform.rotation = rotation;
+            }
+
             if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
                 if (hit.collider.gameObject.tag != "Ground") {
                     updateGhostColor(Color.red);
@@ -53,7 +62,11 @@ public class GridManager : MonoBehaviour
                 Vector3 worldPos = hit.point;
                 Vector3Int gridPos = WorldToGrid(worldPos);
                 Vector3 snappedWorldPos = GridToWorld(gridPos);
-                snappedWorldPos.y = 0.5f; // Adjust for object height
+                PlacementOffset offsetComponent = prefabToPlace.GetComponent<PlacementOffset>();
+                if (offsetComponent != null) {
+                    offsetY = offsetComponent.offsetY;
+                }
+                snappedWorldPos.y = offsetY; // Adjust for object height
 
                 ghostObject.transform.position = snappedWorldPos;
             }
@@ -66,7 +79,11 @@ public class GridManager : MonoBehaviour
                     Vector3 worldPos = hit.point;
                     Vector3Int gridPos = WorldToGrid(worldPos);
                     Vector3 snappedWorldPos = GridToWorld(gridPos);
-                    snappedWorldPos.y = 0.5f; // Adjust for object height
+                    PlacementOffset offsetComponent = prefabToPlace.GetComponent<PlacementOffset>();
+                    if (offsetComponent != null) {
+                        offsetY = offsetComponent.offsetY;
+                    }
+                    snappedWorldPos.y = offsetY; // Adjust for object height
                     Instantiate(prefabToPlace, snappedWorldPos, Quaternion.identity, placementContainer);
                 }
 
@@ -78,13 +95,38 @@ public class GridManager : MonoBehaviour
                 }
                 ghostObject = null;
             }
+        } else if (!UI && !placement) {
+            if (Input.GetMouseButtonDown(0)) {
+                Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
+                RaycastHit hit;
+
+                if (Physics.Raycast(ray, out hit)) {
+                    if (hit.collider.gameObject.tag == "Rotatable") {
+                        UI = true;
+                        prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
+                    }
+                }
+            }
+        } else if (Input.GetMouseButtonDown(1)) {
+            UI = false;
+            prefabOptionsMenu.CloseMenu();
         }
     }
 
-    public void setPrefabPlacement(GameObject prefab) {
-        prefabToPlace = prefab;
+    public void setPrefabPlacement(Object prefab) {
+        GameObject obj = (GameObject)prefab;
+        prefabToPlace = obj;
         placement = true;
         CreateGhostObject();
+    }
+
+    public void RotateButtonClick() {
+        prefabOptionsMenu.RotatePrefab();
+    }
+
+    public void DeleteButtonClick() {
+        prefabOptionsMenu.DeletePrefab();
+        UI = false;
     }
 
     void CreateGhostObject() {

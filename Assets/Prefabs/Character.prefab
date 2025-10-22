@@ -14,9 +14,10 @@ GameObject:
   - component: {fileID: 5235470034551619086}
   - component: {fileID: 2206684332247353472}
   - component: {fileID: 7108236612277834525}
+  - component: {fileID: -6114173091369137318}
   m_Layer: 0
   m_Name: Character
-  m_TagString: Untagged
+  m_TagString: Rotatable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -30,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 1075446157649888535}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -4.85, y: 0.43, z: -4.95}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -150,3 +151,16 @@ MonoBehaviour:
   path: []
   startPosition: {x: 0, y: 0, z: 0}
   speed: 50
+--- !u!114 &-6114173091369137318
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075446157649888535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e6b30f9725057384a867f8a3ae62c9d0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  offsetY: 0.5
