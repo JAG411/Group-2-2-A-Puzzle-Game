@@ -4,6 +4,20 @@ using UnityEngine;
 
 public class CollisionBehaviour : MonoBehaviour
 {
+
+    public LevelCompleteBehaviour levelCompleteUI;
+
+    void Start()
+    {
+        // Auto-find the LevelCompleteBehaviour in the scene
+        levelCompleteUI = FindFirstObjectByType<LevelCompleteBehaviour>(FindObjectsInactive.Include);
+        
+        if (levelCompleteUI == null)
+        {
+            Debug.LogWarning("LevelCompleteBehaviour not found in scene!");
+        }
+    }
+
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.tag == "Rotatable") {
             Debug.Log("Collision occurred with object");
@@ -20,6 +34,8 @@ public class CollisionBehaviour : MonoBehaviour
                 // Hit near the center
                 transform.forward = other.transform.forward;
             }
+        } else if (other.gameObject.tag == "Goal") {
+            levelCompleteUI.ShowLevelComplete();
         }
     }
 }

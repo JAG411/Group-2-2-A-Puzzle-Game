@@ -101,7 +101,7 @@ public class GridManager : MonoBehaviour
                 RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit)) {
-                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction") {
+                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal") {
                         UI = true;
                         prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
                     }
@@ -118,6 +118,8 @@ public class GridManager : MonoBehaviour
         prefabToPlace = obj;
         placement = true;
         CreateGhostObject();
+        UI = false;
+        prefabOptionsMenu.CloseMenu();
     }
 
     public void RotateButtonClick() {

@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 7108236612277834525}
   - component: {fileID: -6114173091369137318}
   - component: {fileID: -6702135876237394381}
-  - component: {fileID: 7555575978619909085}
+  - component: {fileID: 3242002311825109665}
   m_Layer: 0
   m_Name: Character
   m_TagString: Rotatable
@@ -179,7 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
---- !u!114 &7555575978619909085
+--- !u!114 &3242002311825109665
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -191,3 +191,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f276406ed57f9428ad8ce1b5a3dd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  levelCompleteUI: {fileID: 0}

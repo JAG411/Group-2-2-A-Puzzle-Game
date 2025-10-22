@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1435498888899440654}
   - component: {fileID: 495041917705912803}
   m_Layer: 0
-  m_Name: Cube
+  m_Name: Wall
   m_TagString: Rotatable
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

@@ -6,6 +6,8 @@ TagManager:
   tags:
   - Ground
   - Rotatable
+  - Direction
+  - Goal
   layers:
   - Default
   - TransparentFX
