@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class CharacterMovement : MonoBehaviour
 {
-
-    public GridManager gridManager;
+    
     public float speed = 5f;
     Rigidbody rb;
 

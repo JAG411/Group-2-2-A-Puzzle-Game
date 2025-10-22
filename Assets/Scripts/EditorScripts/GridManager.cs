@@ -101,7 +101,7 @@ public class GridManager : MonoBehaviour
                 RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit)) {
-                    if (hit.collider.gameObject.tag == "Rotatable") {
+                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction") {
                         UI = true;
                         prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
                     }
@@ -140,9 +140,27 @@ public class GridManager : MonoBehaviour
         foreach (Renderer render in renderers) {
             Material material = new Material(render.material);
             Color color = material.color;
-            color.a = 0.9f;
+            color.a = 0.5f;
             material.color = color;
             material.renderQueue = 3000; // Ensure it's rendered on top
+            render.material = material;
+        }
+
+        Collider[] colliders = ghostObject.GetComponentsInChildren<Collider>();
+        foreach (Collider col in colliders) {
+            col.enabled = false;
+        }
+
+        Rigidbody[] rbs = ghostObject.GetComponentsInChildren<Rigidbody>();
+        foreach (Rigidbody rb in rbs) {
+            rb.isKinematic = true;
+            rb.detectCollisions = false;
+            rb.useGravity = false;
+        }
+
+        MonoBehaviour[] scripts = ghostObject.GetComponentsInChildren<MonoBehaviour>();
+        foreach (MonoBehaviour script in scripts) {
+            script.enabled = false;
         }
     }
 
