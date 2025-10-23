@@ -6,7 +6,12 @@ using UnityEngine.SceneManagement;
 public class MainMenu : MonoBehaviour
 {
     // Loads the level editor scene
-    public void StartGame()
+    public void PlayGame()
+    {
+        SceneManager.LoadScene(2);
+    }
+
+    public void LoadLevelEditor()
     {
         SceneManager.LoadScene(1);
     }

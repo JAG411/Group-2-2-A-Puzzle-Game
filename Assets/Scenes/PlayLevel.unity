@@ -544,7 +544,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
+      - m_Target: {fileID: 280460052}
         m_TargetAssemblyTypeName: GridManager, Assembly-CSharp
         m_MethodName: RotateButtonClick
         m_Mode: 1
