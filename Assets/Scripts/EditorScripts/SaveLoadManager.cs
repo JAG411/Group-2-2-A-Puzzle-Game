@@ -43,7 +43,7 @@ public class SaveLoadManager : MonoBehaviour
         if (!Directory.Exists(levelFolder)) {
             Directory.CreateDirectory(levelFolder);
         }
-
+        LoadLevel();
     }
 
     public void SaveLevel() {

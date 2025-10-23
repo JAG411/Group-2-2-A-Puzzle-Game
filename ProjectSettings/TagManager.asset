@@ -8,6 +8,7 @@ TagManager:
   - Rotatable
   - Direction
   - Goal
+  - Enemy
   layers:
   - Default
   - TransparentFX

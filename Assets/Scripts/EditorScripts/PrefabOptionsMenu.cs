@@ -30,7 +30,28 @@ public class PrefabOptionsMenu : MonoBehaviour
         CloseMenu();
     }
 
-    public void RotatePrefab() {
-        targetPrefab.transform.Rotate(0, 90f, 0);
+    public void RotatePrefab()
+    {
+        if (targetPrefab == null)
+            return;
+        EnemyMovement em = targetPrefab.GetComponent<EnemyMovement>();
+
+        if (em != null)
+        {
+            if (Mathf.Abs(em.ChangeDirection.z) > Mathf.Abs(em.ChangeDirection.x))
+            {
+                em.ChangeDirection = Vector3.right;
+            }
+            else
+            {
+                em.ChangeDirection = Vector3.forward;
+            }
+            targetPrefab.transform.rotation = Quaternion.LookRotation(em.ChangeDirection);
+        }
+        else
+        {
+            targetPrefab.transform.Rotate(0, 90f, 0);
+        }
     }
+
 }
