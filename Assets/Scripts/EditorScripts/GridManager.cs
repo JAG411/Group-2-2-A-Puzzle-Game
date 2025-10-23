@@ -14,6 +14,9 @@ public class GridManager : MonoBehaviour
     private Quaternion rotation;
     public PrefabOptionsMenu prefabOptionsMenu;
     public bool UI = false;
+    public SaveLoadManager saveLoadManager;
+    private Vector3 playerStartPosition;
+    private Quaternion playerStartRotation;
 
     public Vector3 GridToWorld(Vector3Int gridPos)
     {
@@ -40,6 +43,10 @@ public class GridManager : MonoBehaviour
                 Gizmos.DrawWireCube(worldPos, cellSize);
             }
         }
+    }
+
+    void Start() {
+        saveLoadManager.LoadLevel();
     }
 
      void Update()
@@ -84,6 +91,10 @@ public class GridManager : MonoBehaviour
                         offsetY = offsetComponent.offsetY;
                     }
                     snappedWorldPos.y = offsetY; // Adjust for object height
+                    if (prefabToPlace.tag == "Player") {
+                        playerStartPosition = snappedWorldPos;
+                        playerStartRotation = Quaternion.identity;
+                    }
                     Instantiate(prefabToPlace, snappedWorldPos, Quaternion.identity, placementContainer);
                 }
 
@@ -101,7 +112,7 @@ public class GridManager : MonoBehaviour
                 RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit)) {
-                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal") {
+                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal" || hit.collider.gameObject.tag == "Player") {
                         UI = true;
                         prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
                     }
@@ -172,5 +183,13 @@ public class GridManager : MonoBehaviour
             Material material = render.material;
             material.color = color;
         }
+    }
+
+    public Vector3 getPlayerSpawnPosition() {
+        return playerStartPosition;
+    }
+
+    public Quaternion getPlayerSpawnRotation() {
+        return playerStartRotation;
     }
 }

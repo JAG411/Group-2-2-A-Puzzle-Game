@@ -1,0 +1,44 @@
+{
+    "levelName": "levelData",
+    "placedObjects": [
+        {
+            "prefabName": "Goal",
+            "position": {
+                "x": 1.0,
+                "y": 0.02500152587890625,
+                "z": 2.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        },
+        {
+            "prefabName": "Character",
+            "position": {
+                "x": 1.0,
+                "y": 0.5,
+                "z": 1.28387451171875
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        }
+    ],
+    "playerStartPosition": {
+        "x": 1.0,
+        "y": 0.5,
+        "z": -5.0
+    },
+    "playerSpawnRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 1.0
+    }
+}
