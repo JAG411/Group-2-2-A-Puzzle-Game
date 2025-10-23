@@ -68,7 +68,13 @@ public class SaveLoadManager : MonoBehaviour
     }
     
     public void LoadLevel() {
-        Debug.Log("Loading level: " + saveFileName);
+        if (string.IsNullOrEmpty(levelFolder)) {
+            levelFolder = Application.dataPath + "/Levels/";
+            if (!Directory.Exists(levelFolder)) {
+                Directory.CreateDirectory(levelFolder);
+            }  
+        }
+        Debug.Log("Loading level: " + saveFileName + " from " + levelFolder);
         string filePath = levelFolder + saveFileName + ".json";
         
         if (File.Exists(filePath)) {

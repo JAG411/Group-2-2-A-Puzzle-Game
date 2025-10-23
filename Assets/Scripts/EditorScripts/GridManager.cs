@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GridManager : MonoBehaviour
 {
@@ -17,6 +18,8 @@ public class GridManager : MonoBehaviour
     public SaveLoadManager saveLoadManager;
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
+    public bool levelComplete = false;
+    public SaveLevelUI saveLevelUI;
 
     public Vector3 GridToWorld(Vector3Int gridPos)
     {
@@ -46,7 +49,10 @@ public class GridManager : MonoBehaviour
     }
 
     void Start() {
-        saveLoadManager.LoadLevel();
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "PlayLevel") { 
+            saveLoadManager.LoadLevel();
+        }
     }
 
      void Update()
@@ -95,6 +101,7 @@ public class GridManager : MonoBehaviour
                         playerStartPosition = snappedWorldPos;
                         playerStartRotation = Quaternion.identity;
                     }
+                    setLevelComplete(false);
                     Instantiate(prefabToPlace, snappedWorldPos, Quaternion.identity, placementContainer);
                 }
 
@@ -112,7 +119,8 @@ public class GridManager : MonoBehaviour
                 RaycastHit hit;
 
                 if (Physics.Raycast(ray, out hit)) {
-                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal" || hit.collider.gameObject.tag == "Player") {
+                    Scene currentScene = SceneManager.GetActiveScene();
+                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal" || (hit.collider.gameObject.tag == "Player" && currentScene.name == "EditorScene")) {
                         UI = true;
                         prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
                     }
@@ -191,5 +199,26 @@ public class GridManager : MonoBehaviour
 
     public Quaternion getPlayerSpawnRotation() {
         return playerStartRotation;
+    }
+
+    public void setLevelComplete(bool complete) {
+        levelComplete = complete;
+        if (complete) {
+            saveLevelUI.OpenSaveUI();
+        } else {
+            saveLevelUI.CloseSaveUI();
+        }
+    }
+
+    public void RespawnPlayer() {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null) {
+            player.transform.position = playerStartPosition;
+            player.transform.rotation = playerStartRotation;
+        }
+    }
+
+    public void SaveLevel() {
+        saveLoadManager.SaveLevel();
     }
 }
