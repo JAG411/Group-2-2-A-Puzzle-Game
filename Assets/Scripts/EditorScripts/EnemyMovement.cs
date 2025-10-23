@@ -23,4 +23,15 @@ public class EnemyMovement : MonoBehaviour
     {
         ChangeDirection = -ChangeDirection;
     }
+    public void ChangeAxes()
+    {
+        if (Mathf.Abs(ChangeDirection.z) > Mathf.Abs(ChangeDirection.x))
+    {
+        ChangeDirection = Vector3.right;
+    }
+    else
+    {
+        ChangeDirection = Vector3.forward;
+    }
+    }
 }

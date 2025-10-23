@@ -4,14 +4,17 @@ using UnityEngine;
 
 public class CollisionBehaviour : MonoBehaviour
 {
+    public GameFailBehaviour gameFailBehaviour;
 
     public LevelCompleteBehaviour levelCompleteUI;
 
     void Start()
     {
+        gameFailBehaviour = Object.FindFirstObjectByType<GameFailBehaviour>();
+
         // Auto-find the LevelCompleteBehaviour in the scene
         levelCompleteUI = FindFirstObjectByType<LevelCompleteBehaviour>(FindObjectsInactive.Include);
-        
+
         if (levelCompleteUI == null)
         {
             Debug.LogWarning("LevelCompleteBehaviour not found in scene!");
@@ -19,7 +22,15 @@ public class CollisionBehaviour : MonoBehaviour
     }
 
     private void OnCollisionEnter(Collision collision) {
-        if (collision.gameObject.tag == "Rotatable") {
+        if (collision.gameObject.CompareTag("Enemy"))
+        {
+            Debug.Log("Game Over");
+            gameFailBehaviour.ShowFail();
+            return;
+        }
+
+        if (collision.gameObject.tag == "Rotatable")
+        {
             Debug.Log("Collision occurred with object");
             Destroy(this.gameObject);
         }
