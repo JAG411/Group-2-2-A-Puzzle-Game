@@ -63,6 +63,10 @@ public class SaveLoadManager : MonoBehaviour
         }
 
         string json = JsonUtility.ToJson(levelData, true);
+        levelFolder = Application.dataPath + "/CreatedLevels/";
+        if (!Directory.Exists(levelFolder)) {
+            Directory.CreateDirectory(levelFolder);
+        }  
         File.WriteAllText(levelFolder + saveFileName + ".json", json);
         Debug.Log("Level saved: " + levelFolder + saveFileName + ".json");
     }

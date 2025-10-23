@@ -99,5 +99,5 @@ InitTestScene*.unity*
 /[Aa]ssets/[Ii]nit[Tt]est[Ss]cene*.unity*
 
 # Level data folder
-Assets/Levels/
-Assets/Levels.meta
+Assets/CreatedLevels/
+Assets/CreatedLevels.meta
