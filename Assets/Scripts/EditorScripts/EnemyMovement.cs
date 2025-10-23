@@ -11,7 +11,8 @@ public class EnemyMovement : MonoBehaviour
     public Vector3 startDirection;
     void Start()
     {
-        startDirection = ChangeDirection.normalized;
+        ChangeDirection = transform.forward.normalized;
+        startDirection = ChangeDirection;
     }
 
     // Update is called once per frame
