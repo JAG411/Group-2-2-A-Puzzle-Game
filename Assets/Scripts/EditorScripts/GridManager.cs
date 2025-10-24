@@ -206,6 +206,10 @@ public class GridManager : MonoBehaviour
 
     public void setLevelComplete(bool complete) {
         levelComplete = complete;
+        if (saveLevelUI == null)
+        {
+            return;
+        }
         if (complete) {
             saveLevelUI.OpenSaveUI();
         } else {

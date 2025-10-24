@@ -33,12 +33,15 @@ public class SaveLoadManager : MonoBehaviour
     public GridManager gridManager;
 
     public string saveFileName = "levelData";
-    public string levelFolder; 
+    public string levelFolder;
+
+    [Header("Level Settings")]
+    public string folderName = "Levels";
 
     // Start is called before the first frame update
     void Start()
     {
-        levelFolder = Application.dataPath + "/Levels/";
+        levelFolder = Application.dataPath + "/" + folderName + "/";
         
         if (!Directory.Exists(levelFolder)) {
             Directory.CreateDirectory(levelFolder);
@@ -53,13 +56,20 @@ public class SaveLoadManager : MonoBehaviour
         levelData.playerStartPosition = gridManager.getPlayerSpawnPosition();
         levelData.playerSpawnRotation = gridManager.getPlayerSpawnRotation();
 
-        foreach (Transform child in placementContainer) {
+        foreach (Transform child in placementContainer)
+        {
             PlacedObjectData objData = new PlacedObjectData(
                 child.gameObject.name.Replace("(Clone)", "").Trim(),
                 child.position,
                 child.rotation
             );
             levelData.placedObjects.Add(objData);
+        }
+        
+        levelFolder = Application.dataPath + "/" + folderName + "/";
+        if (!Directory.Exists(levelFolder))
+        {
+            Directory.CreateDirectory(levelFolder);
         }
 
         string json = JsonUtility.ToJson(levelData, true);
