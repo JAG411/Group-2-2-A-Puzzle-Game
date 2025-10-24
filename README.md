@@ -12,4 +12,4 @@ Guide the character (sphere) to the end goal. Avoid obstacles and rotate interac
 
 ### Level controls
 
-Left click object - Bring up option to rotate
+Left click object - Bring up option to rotate (Right click to exit that UI)
