@@ -1256,6 +1256,7 @@ MonoBehaviour:
   gridManager: {fileID: 280460052}
   saveFileName: levelData
   levelFolder: 
+  folderName: CreatedLevels
 --- !u!4 &1726315067
 Transform:
   m_ObjectHideFlags: 0
