@@ -32,7 +32,7 @@ public class SaveLoadManager : MonoBehaviour
     public GameObject[] placeablePrefabs;
     public GridManager gridManager;
 
-    public string saveFileName = "levelData";
+    public string saveFileName = "tempLevelData";
     public string levelFolder;
 
     [Header("Level Settings")]
@@ -117,6 +117,39 @@ public class SaveLoadManager : MonoBehaviour
             Debug.Log("Level loaded: " + filePath);
         } else {
             Debug.LogError("Save file not found: " + filePath);
+        }
+    }
+
+    public void LoadLevelFromResources() {
+        string levelName = saveFileName;
+        TextAsset levelFile = Resources.Load<TextAsset>("Levels/" + levelName);
+        if (levelFile != null) {
+            string json = levelFile.text;
+            LevelData levelData = JsonUtility.FromJson<LevelData>(json);
+            
+            // Load the level data as before...
+            LoadLevelFromData(levelData);
+        } else {
+            Debug.LogError("Level file not found in Resources: " + levelName);
+        }
+    }
+
+    private void LoadLevelFromData(LevelData levelData) {
+        // Clear existing objects
+        foreach (Transform child in placementContainer) {
+            Destroy(child.gameObject);
+        }
+
+        // Instantiate saved objects
+        foreach (PlacedObjectData objData in levelData.placedObjects) {
+            GameObject prefab = Array.Find(placeablePrefabs, p => p.name == objData.prefabName);
+            if (prefab != null) {
+                if (objData.prefabName == "Character") {
+                    GameObject player = Instantiate(prefab, levelData.playerStartPosition, levelData.playerSpawnRotation, placementContainer);
+                } else {
+                    GameObject obj = Instantiate(prefab, objData.position, objData.rotation, placementContainer);
+                }
+            }
         }
     }
 

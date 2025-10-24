@@ -4,8 +4,6 @@ using UnityEngine;
 
 public class CollisionBehaviour : MonoBehaviour
 {
-    public GameFailBehaviour gameFailBehaviour;
-
     public LevelCompleteBehaviour levelCompleteUI;
 
     public GameFailBehaviour gameFailUI;
@@ -42,6 +40,10 @@ public class CollisionBehaviour : MonoBehaviour
             Debug.Log("Game Over");
             gameFailUI.ShowFail();
             Destroy(this.gameObject);
+        }
+
+        if (collision.gameObject.tag == "Goal") {
+            levelCompleteUI.ShowLevelComplete();
         }
     }
 
