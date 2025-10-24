@@ -136,7 +136,7 @@ Rigidbody:
   m_IsKinematic: 0
   m_Interpolate: 1
   m_Constraints: 80
-  m_CollisionDetection: 2
+  m_CollisionDetection: 1
 --- !u!114 &7108236612277834525
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,7 +165,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b30f9725057384a867f8a3ae62c9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetY: 0.5
+  offsetY: 0.25
 --- !u!114 &-6702135876237394381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +179,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 5
+  movement: 0
 --- !u!114 &3242002311825109665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -193,3 +194,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   gameFailBehaviour: {fileID: 0}
   levelCompleteUI: {fileID: 0}
+  gameFailUI: {fileID: 0}

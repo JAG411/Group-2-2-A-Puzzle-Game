@@ -228,4 +228,10 @@ public class GridManager : MonoBehaviour
     public void SaveLevel() {
         saveLoadManager.SaveLevel();
     }
+
+    public void StartMovement() {
+        Transform character = placementContainer.transform.Find("Character(Clone)");
+        CharacterMovement movementScript = character.GetComponent<CharacterMovement>();
+        movementScript.StartMovement();
+    }
 }
