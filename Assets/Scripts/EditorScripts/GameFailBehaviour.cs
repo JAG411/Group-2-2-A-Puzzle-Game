@@ -3,12 +3,17 @@ using UnityEngine.SceneManagement;
 
 public class GameFailBehaviour : MonoBehaviour
 {
-    public GameObject fail;
+    void Start()
+    {
+        gameObject.SetActive(false);
+    }
+
     public void ShowFail()
     {
+        gameObject.SetActive(true);
         Time.timeScale = 0f;
-        fail.SetActive(true);
     }
+
     public void RetryLevel()
     {
         Time.timeScale = 1f;

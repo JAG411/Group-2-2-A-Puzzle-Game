@@ -52,6 +52,9 @@ public class GridManager : MonoBehaviour
         Scene currentScene = SceneManager.GetActiveScene();
         if (currentScene.name == "PlayLevel") { 
             saveLoadManager.LoadLevel();
+        } else if (currentScene.name == "LevelEditor") {
+            saveLoadManager.LoadLevel();
+
         }
     }
 

@@ -8,9 +8,11 @@ public class CollisionBehaviour : MonoBehaviour
 
     public LevelCompleteBehaviour levelCompleteUI;
 
+    public GameFailBehaviour gameFailUI;
+
     void Start()
     {
-        gameFailBehaviour = Object.FindFirstObjectByType<GameFailBehaviour>();
+        gameFailUI = Object.FindFirstObjectByType<GameFailBehaviour>(FindObjectsInactive.Include);
 
         // Auto-find the LevelCompleteBehaviour in the scene
         levelCompleteUI = FindFirstObjectByType<LevelCompleteBehaviour>(FindObjectsInactive.Include);
@@ -19,19 +21,26 @@ public class CollisionBehaviour : MonoBehaviour
         {
             Debug.LogWarning("LevelCompleteBehaviour not found in scene!");
         }
+
+        if (gameFailUI == null)
+        {
+            Debug.LogWarning("GameFailBehaviour not found in scene!");
+        }
     }
 
     private void OnCollisionEnter(Collision collision) {
         if (collision.gameObject.CompareTag("Enemy"))
         {
             Debug.Log("Game Over");
-            gameFailBehaviour.ShowFail();
+            gameFailUI.ShowFail();
             return;
         }
 
         if (collision.gameObject.tag == "Rotatable")
         {
             Debug.Log("Collision occurred with object");
+            Debug.Log("Game Over");
+            gameFailUI.ShowFail();
             Destroy(this.gameObject);
         }
     }
