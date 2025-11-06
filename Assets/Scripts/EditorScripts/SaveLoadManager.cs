@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 using System.IO;
+using TMPro;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 [Serializable]
 public class PlacedObjectData {
@@ -32,21 +35,47 @@ public class SaveLoadManager : MonoBehaviour
     public GameObject[] placeablePrefabs;
     public GridManager gridManager;
 
-    public string saveFileName = "tempLevelData";
-    public string levelFolder;
+    public Transform levelPanel;
+    public Transform levelSelectionUI;
+
+    public TMP_InputField levelNameInput;
 
     [Header("Level Settings")]
-    public string folderName = "Levels";
+    // public string folderName = "Levels";
+    public string saveFileName = "tempLevelData";
+    private string levelFolder;
 
     // Start is called before the first frame update
     void Start()
     {
-        levelFolder = Application.dataPath + "/" + folderName + "/";
-        
+        levelFolder = Application.dataPath + "/CreatedLevels/";
         if (!Directory.Exists(levelFolder)) {
             Directory.CreateDirectory(levelFolder);
+        }  
+
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "PlayLevel") { 
+            TextAsset[] levels = Resources.LoadAll<TextAsset>("Levels");
+            foreach (TextAsset level in levels) {
+                Debug.Log("Found level in Resources: " + level.name);
+                GameObject prefab = Array.Find(placeablePrefabs, p => p.name == "Level_Button");
+                GameObject btnObj = Instantiate(prefab, levelPanel);
+                Button btn = btnObj.GetComponent<Button>();
+                btn.GetComponentInChildren<TMP_Text>().text = level.name;
+                btn.onClick.AddListener(() => LoadLevelFromResources(level.name));
+            }
+        } else if (currentScene.name == "LevelEditor") {
+            string[] levels = Directory.GetFiles(levelFolder, "*.json");
+            foreach (string level in levels) {
+                string levelName = Path.GetFileNameWithoutExtension(level);
+                Debug.Log("Found level in CreatedLevels: " + levelName);
+                GameObject prefab = Array.Find(placeablePrefabs, p => p.name == "Level_Button");
+                GameObject btnObj = Instantiate(prefab, levelPanel);
+                Button btn = btnObj.GetComponent<Button>();
+                btn.GetComponentInChildren<TMP_Text>().text = levelName;
+                btn.onClick.AddListener(() => LoadLevel(levelName));
+            }
         }
-        LoadLevel();
     }
 
     public void SaveLevel() {
@@ -65,12 +94,6 @@ public class SaveLoadManager : MonoBehaviour
             );
             levelData.placedObjects.Add(objData);
         }
-        
-        levelFolder = Application.dataPath + "/" + folderName + "/";
-        if (!Directory.Exists(levelFolder))
-        {
-            Directory.CreateDirectory(levelFolder);
-        }
 
         string json = JsonUtility.ToJson(levelData, true);
         levelFolder = Application.dataPath + "/CreatedLevels/";
@@ -81,15 +104,9 @@ public class SaveLoadManager : MonoBehaviour
         Debug.Log("Level saved: " + levelFolder + saveFileName + ".json");
     }
     
-    public void LoadLevel() {
-        if (string.IsNullOrEmpty(levelFolder)) {
-            levelFolder = Application.dataPath + "/Levels/";
-            if (!Directory.Exists(levelFolder)) {
-                Directory.CreateDirectory(levelFolder);
-            }  
-        }
-        Debug.Log("Loading level: " + saveFileName + " from " + levelFolder);
-        string filePath = levelFolder + saveFileName + ".json";
+    public void LoadLevel(String levelName) {
+        Debug.Log("Loading level: " + levelName + " from " + levelFolder);
+        string filePath = levelFolder + "/" + levelName + ".json";
         
         if (File.Exists(filePath)) {
             string json = File.ReadAllText(filePath);
@@ -115,14 +132,16 @@ public class SaveLoadManager : MonoBehaviour
             }
 
             Debug.Log("Level loaded: " + filePath);
+            levelSelectionUI.gameObject.SetActive(false);  
         } else {
             Debug.LogError("Save file not found: " + filePath);
         }
     }
 
-    public void LoadLevelFromResources() {
-        string levelName = saveFileName;
+    public void LoadLevelFromResources(String levelName) {
+        // string levelName = saveFileName;
         TextAsset levelFile = Resources.Load<TextAsset>("Levels/" + levelName);
+        
         if (levelFile != null) {
             string json = levelFile.text;
             LevelData levelData = JsonUtility.FromJson<LevelData>(json);
@@ -151,6 +170,15 @@ public class SaveLoadManager : MonoBehaviour
                 }
             }
         }
+        levelSelectionUI.gameObject.SetActive(false);
+    }
+
+    public void HideLevelSelectionUI() {
+        levelSelectionUI.gameObject.SetActive(false);
+    }
+
+    public void updateLevelName() {
+        saveFileName = levelNameInput.text;
     }
 
 }

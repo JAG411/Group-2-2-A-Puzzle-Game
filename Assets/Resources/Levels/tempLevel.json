@@ -1,1 +1,44 @@
-{}
+{
+    "levelName": "tempLevel",
+    "placedObjects": [
+        {
+            "prefabName": "Goal",
+            "position": {
+                "x": 0.0,
+                "y": 0.02500152587890625,
+                "z": 3.0
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        },
+        {
+            "prefabName": "Character",
+            "position": {
+                "x": 0.0,
+                "y": 0.15000152587890626,
+                "z": -1.7897377014160157
+            },
+            "rotation": {
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0,
+                "w": 1.0
+            }
+        }
+    ],
+    "playerStartPosition": {
+        "x": 0.0,
+        "y": 0.25,
+        "z": -4.0
+    },
+    "playerSpawnRotation": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0,
+        "w": 1.0
+    }
+}
