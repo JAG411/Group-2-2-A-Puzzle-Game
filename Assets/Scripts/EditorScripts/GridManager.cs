@@ -2,7 +2,6 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UI;
 
 public class GridManager : MonoBehaviour
 {
@@ -50,12 +49,13 @@ public class GridManager : MonoBehaviour
     }
 
     void Start() {
-        // Scene currentScene = SceneManager.GetActiveScene();
-        // if (currentScene.name == "PlayLevel") { 
-        //     saveLoadManager.LoadLevelFromResources();
-        // } else if (currentScene.name == "LevelEditor") {
-        //     saveLoadManager.LoadLevelFromResources();
-        // }
+        Scene currentScene = SceneManager.GetActiveScene();
+        if (currentScene.name == "PlayLevel") { 
+            saveLoadManager.LoadLevelFromResources();
+        } else if (currentScene.name == "LevelEditor") {
+            saveLoadManager.LoadLevelFromResources();
+
+        }
     }
 
      void Update()
@@ -223,6 +223,10 @@ public class GridManager : MonoBehaviour
             player.transform.position = playerStartPosition;
             player.transform.rotation = playerStartRotation;
         }
+    }
+
+    public void SaveLevel() {
+        saveLoadManager.SaveLevel();
     }
 
     public void StartMovement() {
