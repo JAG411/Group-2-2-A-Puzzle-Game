@@ -230,8 +230,4 @@ public class GridManager : MonoBehaviour
         CharacterMovement movementScript = character.GetComponent<CharacterMovement>();
         movementScript.StartMovement();
     }
-
-    public void BackToMainMenu() {
-        SceneManager.LoadScene("MainMenu");
-    }
 }
