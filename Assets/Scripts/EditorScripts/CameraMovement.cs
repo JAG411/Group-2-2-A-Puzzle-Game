@@ -8,16 +8,20 @@ public class CameraMovement : MonoBehaviour
     float speed = 10f;
     float rotationSpeed = 500f;
     float zoomSpeed = 500f;
+    bool movement;
 
     // Start is called before the first frame update
     void Start()
     {
-        
+        movement = false;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (!movement) {
+            return;
+        }
         Movement();
         Zoom();
         Rotation();
@@ -54,5 +58,13 @@ public class CameraMovement : MonoBehaviour
             Vector3 rotation = new Vector3(-mouseY, mouseX, 0) * rotationSpeed * Time.deltaTime;
             transform.eulerAngles += rotation;
         }
+    }
+
+    public void StopMovement() {
+        movement = false;
+    }
+
+    public void StartMovement() {
+        movement = true;
     }
 }

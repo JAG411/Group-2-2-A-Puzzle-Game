@@ -21,6 +21,7 @@ public class GridManager : MonoBehaviour
     private Quaternion playerStartRotation;
     public bool levelComplete = false;
     public SaveLevelUI saveLevelUI;
+    public CameraMovement mainCameraMovement;
 
     public Vector3 GridToWorld(Vector3Int gridPos)
     {
@@ -49,16 +50,8 @@ public class GridManager : MonoBehaviour
         }
     }
 
-    void Start() {
-        // Scene currentScene = SceneManager.GetActiveScene();
-        // if (currentScene.name == "PlayLevel") { 
-        //     saveLoadManager.LoadLevelFromResources();
-        // } else if (currentScene.name == "LevelEditor") {
-        //     saveLoadManager.LoadLevelFromResources();
-        // }
-    }
 
-     void Update()
+    void Update()
     {
         if (placement) {
             Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
@@ -212,6 +205,7 @@ public class GridManager : MonoBehaviour
         }
         if (complete) {
             saveLevelUI.OpenSaveUI();
+            mainCameraMovement.StopMovement();
         } else {
             saveLevelUI.CloseSaveUI();
         }

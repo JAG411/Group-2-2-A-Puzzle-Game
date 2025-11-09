@@ -39,6 +39,7 @@ public class SaveLoadManager : MonoBehaviour
     public Transform levelSelectionUI;
 
     public TMP_InputField levelNameInput;
+    public CameraMovement mainCameraMovement;
 
     [Header("Level Settings")]
     // public string folderName = "Levels";
@@ -132,7 +133,7 @@ public class SaveLoadManager : MonoBehaviour
             }
 
             Debug.Log("Level loaded: " + filePath);
-            levelSelectionUI.gameObject.SetActive(false);  
+            HideLevelSelectionUI();
         } else {
             Debug.LogError("Save file not found: " + filePath);
         }
@@ -170,11 +171,12 @@ public class SaveLoadManager : MonoBehaviour
                 }
             }
         }
-        levelSelectionUI.gameObject.SetActive(false);
+        HideLevelSelectionUI();
     }
 
     public void HideLevelSelectionUI() {
         levelSelectionUI.gameObject.SetActive(false);
+        mainCameraMovement.StartMovement();
     }
 
     public void updateLevelName() {

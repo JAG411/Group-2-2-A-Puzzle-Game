@@ -560,6 +560,7 @@ MonoBehaviour:
   saveLoadManager: {fileID: 1726315066}
   levelComplete: 0
   saveLevelUI: {fileID: 0}
+  mainCameraMovement: {fileID: 579489601}
 --- !u!64 &280460053
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -2984,6 +2985,7 @@ MonoBehaviour:
   levelPanel: {fileID: 1460324211}
   levelSelectionUI: {fileID: 849153962}
   levelNameInput: {fileID: 0}
+  mainCameraMovement: {fileID: 579489601}
   saveFileName: tempLevelData
 --- !u!4 &1726315067
 Transform:
