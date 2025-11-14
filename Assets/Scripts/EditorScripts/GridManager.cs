@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 public class GridManager : MonoBehaviour
 {
@@ -10,15 +11,21 @@ public class GridManager : MonoBehaviour
     public Camera mainCamera;
     public bool placement = false;
     public GameObject prefabToPlace;
+    private Quaternion prefabRotation;
     public Transform placementContainer;
     private GameObject ghostObject;
     private float offsetY = 0.5f;
-    private Quaternion rotation;
     public PrefabOptionsMenu prefabOptionsMenu;
     public bool UI = false;
     public SaveLoadManager saveLoadManager;
     private Vector3 playerStartPosition;
     private Quaternion playerStartRotation;
+    private Vector3 groundPosition;
+    private Vector3 groundScale;
+    private Vector3 northArrowsPosition;
+    private Vector3 southArrowsPosition;
+    private Vector3 eastArrowsPosition;
+    private Vector3 westArrowsPosition;
     public bool levelComplete = false;
     public SaveLevelUI saveLevelUI;
     public CameraMovement mainCameraMovement;
@@ -58,8 +65,7 @@ public class GridManager : MonoBehaviour
             RaycastHit hit;
 
             if (Input.GetKeyDown(KeyCode.R)) {
-                rotation *= Quaternion.Euler(0, 90, 0);
-                ghostObject.transform.rotation = rotation;
+                ghostObject.transform.Rotate(0, 90, 0);
             }
 
             if (Physics.Raycast(ray, out hit, Mathf.Infinity)) {
@@ -95,10 +101,10 @@ public class GridManager : MonoBehaviour
                     snappedWorldPos.y = offsetY; // Adjust for object height
                     if (prefabToPlace.tag == "Player") {
                         playerStartPosition = snappedWorldPos;
-                        playerStartRotation = Quaternion.identity;
+                        playerStartRotation = ghostObject.transform.rotation;
                     }
                     setLevelComplete(false);
-                    Instantiate(prefabToPlace, snappedWorldPos, Quaternion.identity, placementContainer);
+                    Instantiate(prefabToPlace, snappedWorldPos, ghostObject.transform.rotation, placementContainer);
                 }
 
             } else if (Input.GetMouseButtonDown(1)) {
@@ -116,15 +122,40 @@ public class GridManager : MonoBehaviour
 
                 if (Physics.Raycast(ray, out hit)) {
                     Scene currentScene = SceneManager.GetActiveScene();
-                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal" || (hit.collider.gameObject.tag == "Player" && currentScene.name == "EditorScene")) {
+                    if (hit.collider.gameObject.tag == "Rotatable" || hit.collider.gameObject.tag == "Direction" || hit.collider.gameObject.tag == "Goal" || ((hit.collider.gameObject.tag == "Player" || hit.collider.gameObject.tag == "Enemy") && currentScene.name == "LevelEditor")) {
                         UI = true;
                         prefabOptionsMenu.OpenMenu(hit.collider.gameObject);
+                    } else if (hit.collider.gameObject.tag == "Expand") {
+                        GameObject parentObject = hit.collider.gameObject.transform.parent.gameObject;
+                        if (parentObject.name.Contains("North")) {
+                            expandGround("North", parentObject);
+                        } else if (parentObject.name.Contains("South")) {
+                            expandGround("South", parentObject);
+                        } else if (parentObject.name.Contains("East")) {
+                            expandGround("East", parentObject);
+                        } else if (parentObject.name.Contains("West")) {
+                            expandGround("West", parentObject);
+
+                        }
+                    } else if (hit.collider.gameObject.tag == "Contract") {
+                        GameObject parentObject = hit.collider.gameObject.transform.parent.gameObject;
+                        if (parentObject.name.Contains("North")) {
+                            contractGround("North", parentObject);
+                        } else if (parentObject.name.Contains("South")) {
+                            contractGround("South", parentObject);
+                        } else if (parentObject.name.Contains("East")) {
+                            contractGround("East", parentObject);
+                        } else if (parentObject.name.Contains("West")) {
+                            contractGround("West", parentObject);
+                        }
                     }
                 }
             }
-        } else if (Input.GetMouseButtonDown(1)) {
-            UI = false;
-            prefabOptionsMenu.CloseMenu();
+        } else if (UI) {
+            if (Input.GetMouseButtonDown(1) || (Input.GetMouseButtonDown(0) && !IsPointerOverUIObject())) {
+                UI = false;
+                prefabOptionsMenu.CloseMenu();
+            }
         }
     }
 
@@ -227,5 +258,149 @@ public class GridManager : MonoBehaviour
 
     public void BackToMainMenu() {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void expandGround(string direction, GameObject parent) {
+        if (direction == "North") {
+            transform.localScale += new Vector3(0, 0, 0.1f);
+            transform.position += new Vector3(0, 0, 0.5f);
+            adjustArrowPositions(true, "North");
+        } else if (direction == "South") {
+            transform.localScale += new Vector3(0, 0, 0.1f);
+            transform.position += new Vector3(0, 0, -0.5f);
+            adjustArrowPositions(true, "South");
+        } else if (direction == "East") {
+            transform.localScale += new Vector3(0.1f, 0, 0);
+            transform.position += new Vector3(0.5f, 0, 0);
+            adjustArrowPositions(true, "East");
+        } else if (direction == "West") {
+            transform.localScale += new Vector3(0.1f, 0, 0);
+            transform.position += new Vector3(-0.5f, 0, 0);
+            adjustArrowPositions(true, "West");
+        }
+        groundPosition = transform.position;
+        groundScale = transform.localScale;
+    }
+
+    public void contractGround(string direction, GameObject parent) {
+        if (direction == "North") {
+            // Prevent contracting below minimum size
+            if (transform.localScale.z <= 1.1f) {
+                Debug.Log("Cannot contract further North");
+                return;
+            }
+            transform.localScale += new Vector3(0, 0, -0.1f);
+            transform.position += new Vector3(0, 0, -0.5f);
+            adjustArrowPositions(false, "North");
+        } else if (direction == "South") {
+            if (transform.localScale.z <= 1.1f) {
+                Debug.Log("Cannot contract further North");
+                return;
+            }
+            transform.localScale += new Vector3(0, 0, -0.1f);
+            transform.position += new Vector3(0, 0, 0.5f);
+            adjustArrowPositions(false, "South");
+        } else if (direction == "East") {
+            if (transform.localScale.x <= 1.1f) {
+                Debug.Log("Cannot contract further East");
+                return;
+            }
+            transform.localScale += new Vector3(-0.1f, 0, 0);
+            transform.position += new Vector3(-0.5f, 0, 0);
+            adjustArrowPositions(false, "East");
+        } else if (direction == "West") {
+            if (transform.localScale.x <= 1.1f) {
+                Debug.Log("Cannot contract further West");
+                return;
+            }
+            transform.localScale += new Vector3(-0.1f, 0, 0);
+            transform.position += new Vector3(0.5f, 0, 0);
+            adjustArrowPositions(false, "West");
+        }
+        groundPosition = transform.position;
+        groundScale = transform.localScale;
+    }
+
+    public void adjustArrowPositions(bool expand, string direction) {
+        // Adjust positions of arrows based on ground size changes
+        GameObject northArrows = GameObject.Find("Arrows_North");
+        GameObject southArrows = GameObject.Find("Arrows_South");
+        GameObject eastArrows = GameObject.Find("Arrows_East");
+        GameObject westArrows = GameObject.Find("Arrows_West");
+        float adjustmentAmount = 1f;
+
+        if (expand) {
+            if (direction == "North") {
+                northArrows.transform.position += new Vector3(0, 0, adjustmentAmount);
+                westArrows.transform.position += new Vector3(0, 0, adjustmentAmount/2);
+                eastArrows.transform.position += new Vector3(0, 0, adjustmentAmount/2);
+            } else if (direction == "South") {
+                southArrows.transform.position += new Vector3(0, 0, -adjustmentAmount);
+                westArrows.transform.position += new Vector3(0, 0, (-adjustmentAmount)/2);
+                eastArrows.transform.position += new Vector3(0, 0, (-adjustmentAmount)/2);
+            } else if (direction == "East") {
+                eastArrows.transform.position += new Vector3(adjustmentAmount, 0, 0);
+                northArrows.transform.position += new Vector3(adjustmentAmount/2, 0, 0);
+                southArrows.transform.position += new Vector3(adjustmentAmount/2, 0, 0);
+            } else if (direction == "West") {
+                westArrows.transform.position += new Vector3(-adjustmentAmount, 0, 0);
+                northArrows.transform.position += new Vector3((-adjustmentAmount)/2, 0, 0);
+                southArrows.transform.position += new Vector3((-adjustmentAmount)/2, 0, 0);
+            }
+        } else {
+            if (direction == "North") {
+                northArrows.transform.position += new Vector3(0, 0, -adjustmentAmount);
+                westArrows.transform.position += new Vector3(0, 0, (-adjustmentAmount)/2);
+                eastArrows.transform.position += new Vector3(0, 0, (-adjustmentAmount)/2);
+            } else if (direction == "South") {
+                southArrows.transform.position += new Vector3(0, 0, adjustmentAmount);
+                westArrows.transform.position += new Vector3(0, 0, adjustmentAmount/2);
+                eastArrows.transform.position += new Vector3(0, 0, adjustmentAmount/2);
+            } else if (direction == "East") {
+                eastArrows.transform.position += new Vector3(-adjustmentAmount, 0, 0);
+                northArrows.transform.position += new Vector3((-adjustmentAmount)/2, 0, 0);
+                southArrows.transform.position += new Vector3((-adjustmentAmount)/2, 0, 0);
+            } else if (direction == "West") {
+                westArrows.transform.position += new Vector3(adjustmentAmount, 0, 0);
+                northArrows.transform.position += new Vector3(adjustmentAmount/2, 0, 0);
+                southArrows.transform.position += new Vector3(adjustmentAmount/2, 0, 0);
+            }
+        }
+        northArrowsPosition = northArrows.transform.position;
+        southArrowsPosition = southArrows.transform.position;
+        eastArrowsPosition = eastArrows.transform.position;
+        westArrowsPosition = westArrows.transform.position;
+    }
+
+    private bool IsPointerOverUIObject() {
+        PointerEventData eventDataCurrentPosition = new PointerEventData(EventSystem.current);
+        eventDataCurrentPosition.position = new Vector2(Input.mousePosition.x, Input.mousePosition.y);
+        List<RaycastResult> results = new List<RaycastResult>();
+        EventSystem.current.RaycastAll(eventDataCurrentPosition, results);
+        return results.Count > 0;
+    }
+
+    public Vector3 getGroundPosition() {
+        return groundPosition;
+    }
+
+    public Vector3 getGroundScale() {
+        return groundScale;
+    }
+
+    public Vector3 getNorthArrowsPosition() {
+        return northArrowsPosition;
+    }
+
+    public Vector3 getSouthArrowsPosition() {
+        return southArrowsPosition;
+    }
+
+    public Vector3 getEastArrowsPosition() {
+        return eastArrowsPosition;
+    }
+
+    public Vector3 getWestArrowsPosition() {
+        return westArrowsPosition;
     }
 }

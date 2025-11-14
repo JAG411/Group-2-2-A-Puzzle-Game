@@ -9,6 +9,9 @@ TagManager:
   - Direction
   - Goal
   - Enemy
+  - Expand
+  - UI
+  - Contract
   layers:
   - Default
   - TransparentFX

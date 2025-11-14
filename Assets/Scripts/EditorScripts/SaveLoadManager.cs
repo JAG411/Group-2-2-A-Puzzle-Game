@@ -27,6 +27,12 @@ public class LevelData {
     public List<PlacedObjectData> placedObjects = new List<PlacedObjectData>();
     public Vector3 playerStartPosition;
     public Quaternion playerSpawnRotation;
+    public Vector3 grounPosition;
+    public Vector3 groundScale;
+    public Vector3 northArrowsPosition;
+    public Vector3 southArrowsPosition;
+    public Vector3 eastArrowsPosition;
+    public Vector3 westArrowsPosition;
 }
 
 public class SaveLoadManager : MonoBehaviour
@@ -85,6 +91,12 @@ public class SaveLoadManager : MonoBehaviour
 
         levelData.playerStartPosition = gridManager.getPlayerSpawnPosition();
         levelData.playerSpawnRotation = gridManager.getPlayerSpawnRotation();
+        levelData.grounPosition = gridManager.getGroundPosition();
+        levelData.groundScale = gridManager.getGroundScale();
+        levelData.northArrowsPosition = gridManager.getNorthArrowsPosition();
+        levelData.southArrowsPosition = gridManager.getSouthArrowsPosition();
+        levelData.eastArrowsPosition = gridManager.getEastArrowsPosition();
+        levelData.westArrowsPosition = gridManager.getWestArrowsPosition();
 
         foreach (Transform child in placementContainer)
         {
@@ -117,6 +129,19 @@ public class SaveLoadManager : MonoBehaviour
             foreach (Transform child in placementContainer) {
                 Destroy(child.gameObject);
             }
+
+            GameObject ground = GameObject.Find("Ground");
+            ground.transform.position = levelData.grounPosition;
+            ground.transform.localScale = levelData.groundScale;
+
+            GameObject northArrows = GameObject.Find("Arrows_North");
+            northArrows.transform.position = levelData.northArrowsPosition;
+            GameObject southArrows = GameObject.Find("Arrows_South");
+            southArrows.transform.position = levelData.southArrowsPosition;
+            GameObject eastArrows = GameObject.Find("Arrows_East");
+            eastArrows.transform.position = levelData.eastArrowsPosition;
+            GameObject westArrows = GameObject.Find("Arrows_West");
+            westArrows.transform.position = levelData.westArrowsPosition;
 
             // Instantiate saved objects
             foreach (PlacedObjectData objData in levelData.placedObjects) {
@@ -159,6 +184,10 @@ public class SaveLoadManager : MonoBehaviour
         foreach (Transform child in placementContainer) {
             Destroy(child.gameObject);
         }
+
+        GameObject ground = GameObject.Find("Ground");
+        ground.transform.position = levelData.grounPosition;
+        ground.transform.localScale = levelData.groundScale;
 
         // Instantiate saved objects
         foreach (PlacedObjectData objData in levelData.placedObjects) {
