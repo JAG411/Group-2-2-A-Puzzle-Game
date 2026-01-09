@@ -17,6 +17,8 @@ GameObject:
   - component: {fileID: -6114173091369137318}
   - component: {fileID: -6702135876237394381}
   - component: {fileID: 3242002311825109665}
+  - component: {fileID: 2123043273614939534}
+  - component: {fileID: 8157759365692374158}
   m_Layer: 0
   m_Name: Character
   m_TagString: Player
@@ -34,7 +36,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.5, y: 0.5, z: 0.5}
+  m_LocalScale: {x: 2, y: 2, z: 2}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
@@ -46,7 +48,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1075446157649888535}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 3669258589346456565, guid: 9b574434f73c46a4eb333235dd556599, type: 3}
 --- !u!23 &2654995982934994982
 MeshRenderer:
   m_ObjectHideFlags: 0
@@ -67,7 +69,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10303, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 47090793e93c4c948b61cbd5422d34cd, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -108,8 +110,8 @@ SphereCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Radius: 0.3
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Radius: 0.1
+  m_Center: {x: 0, y: 0.1, z: 0}
 --- !u!54 &2206684332247353472
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -165,7 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e6b30f9725057384a867f8a3ae62c9d0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offsetY: 0.25
+  offsetY: 0.1
 --- !u!114 &-6702135876237394381
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -180,6 +182,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   speed: 5
   movement: 0
+  holdPlayer: {fileID: 8157759365692374158}
 --- !u!114 &3242002311825109665
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -192,6 +195,34 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 91f276406ed57f9428ad8ce1b5a3dd93, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameFailBehaviour: {fileID: 0}
   levelCompleteUI: {fileID: 0}
   gameFailUI: {fileID: 0}
+  colorLerpSpeed: 5
+  highlightColor: {r: 0, g: 1, b: 0, a: 1}
+  tileSound: {fileID: 8300000, guid: 52558b0d70fa647cf9428ddf27a171c5, type: 3}
+  eatSound: {fileID: 8300000, guid: 3689c41a951bd459f9d486a999f87852, type: 3}
+--- !u!114 &2123043273614939534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075446157649888535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a478e768a9206274cbcae01b9a3ec8f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &8157759365692374158
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1075446157649888535}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 827c1bda3e6d7654f9ef9b6e581fcc18, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canMove: 1

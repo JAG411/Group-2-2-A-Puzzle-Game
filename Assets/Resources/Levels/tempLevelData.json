@@ -1780,7 +1780,7 @@
             }
         },
         {
-            "prefabName": "Character",
+            "prefabName": "Character2",
             "position": {
                 "x": 2.0,
                 "y": 0.15000152587890626,
@@ -1804,5 +1804,35 @@
         "y": 0.0,
         "z": 0.0,
         "w": 1.0
+    },
+    "grounPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "groundScale": {
+        "x": 1.100000023841858,
+        "y": 1.0,
+        "z": 1.100000023841858
+    },
+    "northArrowsPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "southArrowsPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "eastArrowsPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
+    },
+    "westArrowsPosition": {
+        "x": 0.0,
+        "y": 0.0,
+        "z": 0.0
     }
 }
